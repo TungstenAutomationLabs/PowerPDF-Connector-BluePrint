@@ -8,9 +8,9 @@ using System.Windows.Forms;
 namespace CurrentDocumentBluePrint
 {
     /// <summary>
-    /// Property sheet user control for connector settings.
+    /// Configuration control user control for connector settings.
     /// </summary>
-    public partial class PropertySheet2 : UserControl
+    public partial class ConfigurationControl : UserControl
     {
         /// <summary>
         /// Validates the data on the form.
@@ -35,7 +35,7 @@ namespace CurrentDocumentBluePrint
         }
 
         /// <summary>
-        /// Shows help for the property sheet. (No operation)
+        /// Shows help for the configuration control. (No operation)
         /// </summary>
         public void ShowHelp()
         {
@@ -46,10 +46,10 @@ namespace CurrentDocumentBluePrint
         private const string SECRET = "SECRET";
 
         /// <summary>
-        /// Initializes a new instance of the PropertySheet2 class.
+        /// Initializes a new instance of the ConfigurationControl class.
         /// </summary>
         /// <param name="conn">Parent connector.</param>
-        public PropertySheet2(Connector conn)
+        public ConfigurationControl(Connector conn)
         {
             InitializeComponent();
             StoreSheet();
@@ -99,7 +99,7 @@ namespace CurrentDocumentBluePrint
             base.OnHandleDestroyed(e);
         }
 
-        protected static Dictionary<IntPtr, PropertySheet2> sheetList = new Dictionary<IntPtr, PropertySheet2>();
+        protected static Dictionary<IntPtr, ConfigurationControl> sheetList = new Dictionary<IntPtr, ConfigurationControl>();
 
         /// <summary>
         /// Stores the form in the sheet list.
@@ -120,23 +120,23 @@ namespace CurrentDocumentBluePrint
         }
 
         /// <summary>
-        /// Gets the PropertySheet2 instance by window handle.
+        /// Gets the ConfigurationControl instance by window handle.
         /// </summary>
         /// <param name="hwnd">Window handle.</param>
-        /// <returns>PropertySheet2 instance.</returns>
-        public static PropertySheet2 GetSheet(IntPtr hwnd)
+        /// <returns>ConfigurationControl instance.</returns>
+        public static ConfigurationControl GetSheet(IntPtr hwnd)
         {
-            PropertySheet2 retval = null;
+            ConfigurationControl retval = null;
             sheetList.TryGetValue(hwnd, out retval);
             return retval;
         }
 
         /// <summary>
-        /// Gets the PropertySheet2 instance by window handle (int).
+        /// Gets the ConfigurationControl instance by window handle (int).
         /// </summary>
         /// <param name="hWnd">Window handle as int.</param>
-        /// <returns>PropertySheet2 instance.</returns>
-        public static PropertySheet2 GetSheet(int hWnd)
+        /// <returns>ConfigurationControl instance.</returns>
+        public static ConfigurationControl GetSheet(int hWnd)
         {
             return GetSheet((IntPtr)hWnd);
         }
@@ -198,9 +198,9 @@ namespace CurrentDocumentBluePrint
         }
 
         /// <summary>
-        /// Handles the Load event for the property sheet, loading encrypted fields.
+        /// Handles the Load event for the configuration control, loading encrypted fields.
         /// </summary>
-        private void PropertySheet2_Load(object sender, EventArgs e)
+        private void ConfigurationControl_Load(object sender, EventArgs e)
         {
             try
             {

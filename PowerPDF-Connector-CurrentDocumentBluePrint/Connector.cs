@@ -438,7 +438,7 @@ namespace CurrentDocumentBluePrint
         /// </summary>
         int IPropertyPageHandler.Create(int parenthWnd)
         {
-            PropertySheet2 p = new PropertySheet2(this);
+            ConfigurationControl p = new ConfigurationControl(this);
             SetParent(p.Handle, (IntPtr)parenthWnd);
             return (int)p.Handle.ToInt32();
         }
@@ -448,7 +448,7 @@ namespace CurrentDocumentBluePrint
         /// </summary>
         void IPropertyPageHandler.ShowHelp(int hWnd)
         {
-            PropertySheet2 p = PropertySheet2.GetSheet(hWnd);
+            ConfigurationControl p = ConfigurationControl.GetSheet(hWnd);
             if (p != null)
                 p.ShowHelp();
         }
@@ -458,7 +458,7 @@ namespace CurrentDocumentBluePrint
         /// </summary>
         void IPropertyPageHandler.CheckData(int hWnd)
         {
-            PropertySheet2 p = PropertySheet2.GetSheet(hWnd);
+            ConfigurationControl p = ConfigurationControl.GetSheet(hWnd);
             if (p != null)
                 p.CheckData();
         }
@@ -468,7 +468,7 @@ namespace CurrentDocumentBluePrint
         /// </summary>
         void IPropertyPageHandler.UpdateData(int hWnd)
         {
-            PropertySheet2 p = PropertySheet2.GetSheet(hWnd);
+            ConfigurationControl p = ConfigurationControl.GetSheet(hWnd);
             if (p != null)
                 p.UpdateData();
         }
