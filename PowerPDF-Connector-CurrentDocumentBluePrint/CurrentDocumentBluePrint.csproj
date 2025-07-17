@@ -164,7 +164,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(FrameworkSDKDir)\bin\NETFX 4.8 Tools\tlbimp.exe" "$(ProjectDir)\..\DMSConnector.tlb" /out:"$(ProjectDir)DMSConnector.dll"</PreBuildEvent>
+    <PreBuildEvent>"$(FrameworkSDKDir)\bin\NETFX 4.8 Tools\tlbimp.exe" "$(SolutionDir)References\DMSConnector.tlb" /out:"$(ProjectDir)DMSConnector.dll"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

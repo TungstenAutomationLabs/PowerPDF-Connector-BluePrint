@@ -7,10 +7,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("CurrentDocumentBluePrint")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Kofax")]
-[assembly: AssemblyProduct("Kofax Power PDF Products")]
-[assembly: AssemblyCopyright("Copyright (C) 2010-2022 Kofax. All rights reserved.")]
-[assembly: AssemblyTrademark("Kofax, Power PDF, ScanSoft, Recognita, OmniPage and OmniPage Capture SDK are registered trademarks of Kofax Inc. in the United States and/or other countries.")]
+[assembly: AssemblyCompany("Tungsten Automation")]
+[assembly: AssemblyProduct("Tungsten Automation Power PDF Products")]
+[assembly: AssemblyCopyright("© 2025 Tungsten Automation Corporation. All rights reserved.")]
+[assembly: AssemblyTrademark("Tungsten Automation, Power PDF, ScanSoft, Recognita, OmniPage and OmniPage Capture SDK are registered trademarks of Tungsten Automation Corporation in the United States and/or other countries.")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

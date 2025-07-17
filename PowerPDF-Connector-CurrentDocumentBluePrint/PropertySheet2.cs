@@ -7,16 +7,17 @@ using System.Windows.Forms;
 
 namespace CurrentDocumentBluePrint
 {
+    /// <summary>
+    /// Property sheet user control for connector settings.
+    /// </summary>
     public partial class PropertySheet2 : UserControl
     {
-        #region IPropertyPageHandler functions
-
+        /// <summary>
+        /// Validates the data on the form.
+        /// Throws an exception if the data is invalid.
+        /// </summary>
         public void CheckData()
         {
-            // validate the data on the form
-            // throw COMException if there's invalid data
-            // the property sheet will remain active and the dialog
-            // will not be closed until the data is valid
             if (!System.IO.Directory.Exists(this.textBoxDirectory.Text))
             {
                 MessageBox.Show("You must enter a valid directory name!");
@@ -24,24 +25,30 @@ namespace CurrentDocumentBluePrint
             }
         }
 
+        /// <summary>
+        /// Saves the data from the form to the connector.
+        /// </summary>
         public void UpdateData()
         {
-            // save the data from the form
             CheckData();
             m_conn.BaseDirectory = this.textBoxDirectory.Text;
         }
 
+        /// <summary>
+        /// Shows help for the property sheet. (No operation)
+        /// </summary>
         public void ShowHelp()
         {
-            // do nothing
         }
 
-        #endregion IPropertyPageHandler functions
-
-        private Connector m_conn;    // parent connector
+        private Connector m_conn;
         private const string API_URL = "API_URL";
         private const string SECRET = "SECRET";
 
+        /// <summary>
+        /// Initializes a new instance of the PropertySheet2 class.
+        /// </summary>
+        /// <param name="conn">Parent connector.</param>
         public PropertySheet2(Connector conn)
         {
             InitializeComponent();
@@ -68,8 +75,9 @@ namespace CurrentDocumentBluePrint
             WS_EX_CONTROLPARENT = 0x00010000,
         }
 
-        // need to override CreateParams to have our form appear inside
-        // the property dialog
+        /// <summary>
+        /// Gets the CreateParams for the control to appear inside the property dialog.
+        /// </summary>
         protected override CreateParams CreateParams
         {
             get
@@ -81,35 +89,41 @@ namespace CurrentDocumentBluePrint
             }
         }
 
-        // This virtual fn is called when the window handle (HWND) is
-        // destroyed.
+        /// <summary>
+        /// Called when the window handle is destroyed.
+        /// </summary>
+        /// <param name="e">Event arguments.</param>
         protected override void OnHandleDestroyed(EventArgs e)
         {
             ClearSheet();
             base.OnHandleDestroyed(e);
         }
 
-        #region Sheet Store functions
+        protected static Dictionary<IntPtr, PropertySheet2> sheetList = new Dictionary<IntPtr, PropertySheet2>();
 
-        // dictionary for storing HWND - Form associations
-        protected static Dictionary<IntPtr, PropertySheet2> sheetList =
-                                                new Dictionary<IntPtr, PropertySheet2>();
-
-        // store the form in the sheet list
+        /// <summary>
+        /// Stores the form in the sheet list.
+        /// </summary>
         protected void StoreSheet()
         {
             if (!sheetList.ContainsKey(this.Handle))
                 sheetList.Add(this.Handle, this);
         }
 
-        // clear the form from the sheet list
+        /// <summary>
+        /// Removes the form from the sheet list.
+        /// </summary>
         protected void ClearSheet()
         {
             if (sheetList.ContainsKey(this.Handle))
                 sheetList.Remove(this.Handle);
         }
 
-        // return the form from the sheet list by HWND
+        /// <summary>
+        /// Gets the PropertySheet2 instance by window handle.
+        /// </summary>
+        /// <param name="hwnd">Window handle.</param>
+        /// <returns>PropertySheet2 instance.</returns>
         public static PropertySheet2 GetSheet(IntPtr hwnd)
         {
             PropertySheet2 retval = null;
@@ -117,13 +131,19 @@ namespace CurrentDocumentBluePrint
             return retval;
         }
 
+        /// <summary>
+        /// Gets the PropertySheet2 instance by window handle (int).
+        /// </summary>
+        /// <param name="hWnd">Window handle as int.</param>
+        /// <returns>PropertySheet2 instance.</returns>
         public static PropertySheet2 GetSheet(int hWnd)
         {
             return GetSheet((IntPtr)hWnd);
         }
 
-        #endregion Sheet Store functions
-
+        /// <summary>
+        /// Handles the Save button click event, saving encrypted settings.
+        /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
             SaveEncryptedSetting(API_URL, txtAPIURL.Text.Trim());
@@ -131,6 +151,11 @@ namespace CurrentDocumentBluePrint
             MessageBox.Show("Settings saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// Saves an encrypted setting to the registry.
+        /// </summary>
+        /// <param name="key">Registry key name.</param>
+        /// <param name="value">Value to encrypt and save.</param>
         private void SaveEncryptedSetting(string key, string value)
         {
             byte[] encrypted = ProtectedData.Protect(Encoding.UTF8.GetBytes(value), null, DataProtectionScope.CurrentUser);
@@ -142,6 +167,11 @@ namespace CurrentDocumentBluePrint
             }
         }
 
+        /// <summary>
+        /// Loads an encrypted setting from the registry.
+        /// </summary>
+        /// <param name="key">Registry key name.</param>
+        /// <returns>Decrypted setting value.</returns>
         private string LoadEncryptedSetting(string key)
         {
             using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\PPDFFraudConnector"))
@@ -167,11 +197,13 @@ namespace CurrentDocumentBluePrint
             }
         }
 
+        /// <summary>
+        /// Handles the Load event for the property sheet, loading encrypted fields.
+        /// </summary>
         private void PropertySheet2_Load(object sender, EventArgs e)
         {
             try
             {
-                // Load encrypted fields
                 txtAPIURL.Text = LoadEncryptedSetting(API_URL);
                 txtSecret.Text = LoadEncryptedSetting(SECRET);
             }
