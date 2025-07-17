@@ -1,6 +1,6 @@
 ﻿namespace CurrentDocumentBluePrint
 {
-    partial class PropertySheet2
+    partial class ConfigurationControl
     {
         /// <summary>
         /// Required designer variable.
@@ -103,7 +103,7 @@
             this.txtAPIURL.Size = new System.Drawing.Size(427, 22);
             this.txtAPIURL.TabIndex = 7;
             // 
-            // PropertySheet2
+            // ConfigurationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,9 +115,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxDirectory);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "PropertySheet2";
-            this.Size = new System.Drawing.Size(563, 228);
-            this.Load += new System.EventHandler(this.PropertySheet2_Load);
+            this.Name = "ConfigurationControl";
+            this.Size = new System.Drawing.Size(639, 228);
+            this.Load += new System.EventHandler(this.ConfigurationControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

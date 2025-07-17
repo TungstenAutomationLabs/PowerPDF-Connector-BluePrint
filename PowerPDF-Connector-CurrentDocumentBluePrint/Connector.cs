@@ -13,24 +13,32 @@ using System.Windows.Forms;
 
 namespace CurrentDocumentBluePrint
 {
+    /// <summary>
+    /// Contains error code constants for the application.
+    /// </summary>
     public abstract class ERRORS
     {
+        /// <summary>
+        /// Error code for cancelled operations.
+        /// </summary>
         public const int E_CANCELLED = -2147221492;
     }
 
+    /// <summary>
+    /// Implements the DMSConnector and property page handler interfaces for document management.
+    /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
     [GuidAttribute("219588E2-A4B6-4A7A-9044-BDCBDE05566E")]
     [ProgId("CurrentDocumentBluePrint.Connector")]
-    public class Connector : IDMSConnector,
-                              IPropertyPageHandler  // this class implements IPropertyPageHandler itself
-
+    public class Connector : IDMSConnector, IPropertyPageHandler
     {
-        #region COM registration
-
         private static string strProgId = ((ProgIdAttribute)(typeof(Connector).GetCustomAttributes(typeof(ProgIdAttribute), true).First())).Value;
 
-        // register this connector under "HKLM\Software\Scansoft\Connectors"
+        /// <summary>
+        /// Registers this connector under HKLM\Software\Scansoft\Connectors.
+        /// </summary>
+        /// <param name="t">Type to register.</param>
         [ComRegisterFunctionAttribute]
         public static void RegisterAsConnector(Type t)
         {
@@ -40,7 +48,10 @@ namespace CurrentDocumentBluePrint
             RegistryKey rkThisOne = OpenOrCreateSubkey(rkConnectors, GetProgId(t));
         }
 
-        // unregister this connector from under "HKLM\Software\Scansoft\Connectors"
+        /// <summary>
+        /// Unregisters this connector from HKLM\Software\Scansoft\Connectors.
+        /// </summary>
+        /// <param name="t">Type to unregister.</param>
         [ComUnregisterFunctionAttribute]
         public static void UnregisterAsConnector(Type t)
         {
@@ -48,6 +59,12 @@ namespace CurrentDocumentBluePrint
             rk.DeleteSubKey(@"Software\Scansoft\Connectors\" + GetProgId(t));
         }
 
+        /// <summary>
+        /// Opens or creates a registry subkey.
+        /// </summary>
+        /// <param name="parent">Parent registry key.</param>
+        /// <param name="name">Subkey name.</param>
+        /// <returns>The opened or created RegistryKey.</returns>
         private static RegistryKey OpenOrCreateSubkey(RegistryKey parent, string name)
         {
             RegistryKey rk = parent.OpenSubKey(name, true);
@@ -63,13 +80,15 @@ namespace CurrentDocumentBluePrint
             return rk;
         }
 
-        // return the ProgId attribute of a type
+        /// <summary>
+        /// Gets the ProgId attribute value for a given type.
+        /// </summary>
+        /// <param name="t">Type to get ProgId for.</param>
+        /// <returns>ProgId string.</returns>
         private static string GetProgId(Type t)
         {
             return ((ProgIdAttribute)t.GetCustomAttributes(typeof(ProgIdAttribute), true).First()).Value;
         }
-
-        #endregion COM registration
 
         protected string _connectorName = "CurrentDocumentBluePrint";
         protected string _languageCode;
@@ -82,24 +101,25 @@ namespace CurrentDocumentBluePrint
         private const string SECRET = "SECRET";
         protected static string _defaultBaseDirectory = @"c:\";
 
-        #region Constructor / Dispose
-
+        /// <summary>
+        /// Initializes a new instance of the Connector class.
+        /// </summary>
         public Connector()
         {
         }
 
-        #endregion Constructor / Dispose
-
-        #region Menu functions
-
-        // returns the number of menu items and the title of the menu
+        /// <summary>
+        /// Returns the number of menu items and the menu title.
+        /// </summary>
         void IDMSConnector.MenuGetNumberOfItems(out int num, out string title)
         {
             num = _menuItems.Count;
             title = _connectorName;
         }
 
-        // returns the definition of one menu item
+        /// <summary>
+        /// Returns the definition of a menu item.
+        /// </summary>
         void IDMSConnector.MenuGetMenuItem(int num, out int menuItemId, out string text,
             out string tooltip, out bool isPartOfToolbar, out CallbackType cbType,
             out int hIconBig, out int hIconSmall, out bool enabledWithoutDoc)
@@ -121,16 +141,17 @@ namespace CurrentDocumentBluePrint
             enabledWithoutDoc = item.enabledWithoutDoc;
         }
 
-        // called every time the menu is displayed or the state of the toolbar buttons has to be updated
-        // returns true if the menu item for the given docId is enabled (if docId is null or empty, then
-        // the document is not from this connector)
+        /// <summary>
+        /// Returns whether a menu item is enabled for a given document.
+        /// </summary>
         bool IDMSConnector.MenuGetItemState(int menuItemId, string docId)
         {
-            // by default every menu item is enabled for every document
             return true;
         }
 
-        // would be called for menu items with MenuItem callback type
+        /// <summary>
+        /// Executes the action for a menu item.
+        /// </summary>
         void IDMSConnector.MenuAction(int menuItemId, string docId)
         {
             if (menuItemId == (int)ItemId.TryMe)
@@ -143,16 +164,18 @@ namespace CurrentDocumentBluePrint
                 }
                 else
                 {
-                    // Here you would implement the logic for the "Try Me" action
-                    // For example, you could open a dialog or perform some operation
                     MessageBox.Show("API URL: " + apiURL + "\nSecret: " + secret, "It Works", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
-                // we don't have any such menu item by default
                 throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Loads an encrypted setting from the registry.
+        /// </summary>
+        /// <param name="key">Registry key name.</param>
+        /// <returns>Decrypted setting value.</returns>
         private string LoadEncryptedSetting(string key)
         {
             using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\PPDFFraudConnector"))
@@ -178,8 +201,10 @@ namespace CurrentDocumentBluePrint
             }
         }
 
-        #endregion Menu functions
-
+        /// <summary>
+        /// Gets the base directory from the registry.
+        /// </summary>
+        /// <returns>Base directory path.</returns>
         public string GetBaseDirFromRegistry()
         {
             try
@@ -198,6 +223,9 @@ namespace CurrentDocumentBluePrint
             return _defaultBaseDirectory;
         }
 
+        /// <summary>
+        /// Saves the base directory to the registry.
+        /// </summary>
         protected void SaveBaseDirToRegistry()
         {
             RegistryKey rkSoftware = OpenOrCreateSubkey(Registry.CurrentUser, "Software");
@@ -207,23 +235,24 @@ namespace CurrentDocumentBluePrint
             rkThisOne.SetValue("BaseDirectory", (object)_baseDirectory, RegistryValueKind.String);
         }
 
+        /// <summary>
+        /// Gets or sets the base directory for the connector.
+        /// </summary>
         public string BaseDirectory
         {
             get { return _baseDirectory; }
             set { _baseDirectory = value; SaveBaseDirToRegistry(); }
         }
 
-        #region IDMSConnector implementation
-
-        #region Init, Shutdown, etc.
-
+        /// <summary>
+        /// Initializes the connector with the application and language code.
+        /// </summary>
         void IDMSConnector.Init(object application, string LangCode)
         {
             if (!_initialized)
             {
                 _languageCode = LangCode;
 
-                // switch the current culture based on the language
                 CultureInfo cultureInfo = Langs.Iso639_3ToCulture(_languageCode);
                 if (!cultureInfo.IsNeutralCulture)
                     Thread.CurrentThread.CurrentCulture = cultureInfo;
@@ -238,6 +267,9 @@ namespace CurrentDocumentBluePrint
             }
         }
 
+        /// <summary>
+        /// Shuts down the connector and releases resources.
+        /// </summary>
         void IDMSConnector.Shutdown()
         {
             if (_initialized)
@@ -252,18 +284,25 @@ namespace CurrentDocumentBluePrint
             }
         }
 
+        /// <summary>
+        /// Gets the connector name.
+        /// </summary>
         string IDMSConnector.ConnectorName
         {
             get { return _connectorName; }
         }
 
+        /// <summary>
+        /// Sets the parent window handle.
+        /// </summary>
         int IDMSConnector.ParentWindow
         {
             set { _parentWindow = (IntPtr)value; }
         }
 
-        #endregion Init, Shutdown, etc.
-
+        /// <summary>
+        /// Adds a new document to the connector.
+        /// </summary>
         string IDMSConnector.DocAddNew(string sourceFile, string title, string[] docProperties)
         {
             Document doc = Document.CreateNewDocument(_parentWindow, BaseDirectory, sourceFile, title);
@@ -275,32 +314,44 @@ namespace CurrentDocumentBluePrint
             return null;
         }
 
+        /// <summary>
+        /// Gets the local file name for a document.
+        /// </summary>
         string IDMSConnector.DocGetLocalFile(string docId)
         {
             Document doc = _documents[docId];
             return doc.LocalFileName;
         }
 
+        /// <summary>
+        /// Gets the open mode for a document.
+        /// </summary>
         OpenMode IDMSConnector.DocGetOpenMode(string docId)
         {
             Document doc = _documents[docId];
             return doc.OpenMode;
         }
 
+        /// <summary>
+        /// Gets the title for a document.
+        /// </summary>
         string IDMSConnector.DocGetTitle(string docId)
         {
             Document doc = _documents[docId];
             return doc.Title;
         }
 
+        /// <summary>
+        /// Called when a document is modified.
+        /// </summary>
         void IDMSConnector.DocModified(string docId)
         {
-            // not used now
-            // can be used to enable/disable different menu items
-            // if the document was modified inside the application
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Closes a document and removes it from the connector.
+        /// </summary>
         void IDMSConnector.DocClose(string docId, DMSConnector.CloseReason reason)
         {
             Document doc = _documents[docId];
@@ -308,13 +359,18 @@ namespace CurrentDocumentBluePrint
             _documents.Remove(docId);
         }
 
+        /// <summary>
+        /// Opens a document with the specified mode.
+        /// </summary>
         void IDMSConnector.DocOpen(string docId, OpenMode mode)
         {
             Document doc = _documents[docId];
             doc.Open(mode);
         }
 
-        // this is a Save As... operation
+        /// <summary>
+        /// Prepares a document for saving (Save As operation).
+        /// </summary>
         void IDMSConnector.DocPrepareSave(string docId, int menuItemId, string[] docProperties, out string targetFileName)
         {
             Document doc = _documents[docId];
@@ -322,6 +378,9 @@ namespace CurrentDocumentBluePrint
             targetFileName = Path.GetTempFileName();
         }
 
+        /// <summary>
+        /// Saves a document to the specified file name.
+        /// </summary>
         void IDMSConnector.DocSave(string docId, string targetFileName, out string newDocId)
         {
             Document doc = _documents[docId];
@@ -337,6 +396,9 @@ namespace CurrentDocumentBluePrint
             }
         }
 
+        /// <summary>
+        /// Prompts the user to select files and adds them as documents.
+        /// </summary>
         void IDMSConnector.DocSelectFiles(DMSConnector.SelectType type, int MenuIndex, out string[] docIds)
         {
             bool bMultiSelect = (type & SelectType.SELECT_SINGLE_FILE) == 0;
@@ -352,56 +414,63 @@ namespace CurrentDocumentBluePrint
             docIds = uniqueIds.ToArray();
         }
 
+        /// <summary>
+        /// Determines if a file is from DMS. Not implemented.
+        /// </summary>
         string IDMSConnector.FileIsFromDms(string localFile)
         {
-            // not used here
-            // it could be used for example to launch the application with a local file
-            // which was downloaded from a DMS, and then after opening that file
-            // associate it with the correct Connector
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the property page handler for the connector.
+        /// </summary>
         IPropertyPageHandler IDMSConnector.PropertyPageHandler
         {
-            // this connector class implements IPropertyPageHandler itself
             get { return this; }
         }
-
-        #endregion IDMSConnector implementation
-
-        #region IPropertyPageHandler Members
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
+        /// <summary>
+        /// Creates the property sheet and sets its parent window.
+        /// </summary>
         int IPropertyPageHandler.Create(int parenthWnd)
         {
-            PropertySheet2 p = new PropertySheet2(this);
+            ConfigurationControl p = new ConfigurationControl(this);
             SetParent(p.Handle, (IntPtr)parenthWnd);
             return (int)p.Handle.ToInt32();
         }
 
+        /// <summary>
+        /// Shows help for the property sheet.
+        /// </summary>
         void IPropertyPageHandler.ShowHelp(int hWnd)
         {
-            PropertySheet2 p = PropertySheet2.GetSheet(hWnd);
+            ConfigurationControl p = ConfigurationControl.GetSheet(hWnd);
             if (p != null)
                 p.ShowHelp();
         }
 
+        /// <summary>
+        /// Checks the data in the property sheet.
+        /// </summary>
         void IPropertyPageHandler.CheckData(int hWnd)
         {
-            PropertySheet2 p = PropertySheet2.GetSheet(hWnd);
+            ConfigurationControl p = ConfigurationControl.GetSheet(hWnd);
             if (p != null)
                 p.CheckData();
         }
 
+        /// <summary>
+        /// Updates the data in the property sheet.
+        /// </summary>
         void IPropertyPageHandler.UpdateData(int hWnd)
         {
-            PropertySheet2 p = PropertySheet2.GetSheet(hWnd);
+            ConfigurationControl p = ConfigurationControl.GetSheet(hWnd);
             if (p != null)
                 p.UpdateData();
         }
-
-        #endregion IPropertyPageHandler Members
     }
 }

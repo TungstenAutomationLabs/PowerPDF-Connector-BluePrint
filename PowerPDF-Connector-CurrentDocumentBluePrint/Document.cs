@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace CurrentDocumentBluePrint
 {
+    /// <summary>
+    /// Flags representing the state of a document.
+    /// </summary>
     [Flags]
     public enum DOCSTATE
     {
@@ -16,13 +19,23 @@ namespace CurrentDocumentBluePrint
         CLOSED = 4,
     };
 
+    /// <summary>
+    /// Wraps a window handle for use with WinForms dialogs.
+    /// </summary>
     public class WindowWrapper : System.Windows.Forms.IWin32Window
     {
+        /// <summary>
+        /// Initializes a new instance of the WindowWrapper class.
+        /// </summary>
+        /// <param name="ip">Window handle.</param>
         public WindowWrapper(IntPtr ip)
         {
             Handle = ip;
         }
 
+        /// <summary>
+        /// Gets the window handle.
+        /// </summary>
         public IntPtr Handle
         {
             get;
@@ -30,12 +43,12 @@ namespace CurrentDocumentBluePrint
         }
     }
 
+    /// <summary>
+    /// Represents a document managed by the connector.
+    /// </summary>
     public class Document
     {
-        // unique Id used for the document Id
-        // (this might not be the best method to obtain a document Id for every Connector)
         protected string _uniqueId = Guid.NewGuid().ToString();
-
         protected string _localFileName;
         protected string _filePath;
         protected string _saveToPath;
@@ -43,15 +56,34 @@ namespace CurrentDocumentBluePrint
         protected string _title;
         protected OpenMode _openMode = OpenMode.OPEN_NONE;
 
+        /// <summary>
+        /// Gets the unique identifier for the document.
+        /// </summary>
         public string UniqueId
         { get { return _uniqueId; } }
+
+        /// <summary>
+        /// Gets the local file name for the document.
+        /// </summary>
         public string LocalFileName
         { get { return _localFileName; } }
+
+        /// <summary>
+        /// Gets the title of the document.
+        /// </summary>
         public string Title
         { get { return _title; } }
+
+        /// <summary>
+        /// Gets the open mode of the document.
+        /// </summary>
         public OpenMode OpenMode
         { get { return _openMode; } }
 
+        /// <summary>
+        /// Opens the document in the specified mode.
+        /// </summary>
+        /// <param name="mode">Open mode.</param>
         public void Open(OpenMode mode)
         {
             _localFileName = Path.ChangeExtension(Path.GetTempFileName(), Path.GetExtension(_filePath));
@@ -59,6 +91,9 @@ namespace CurrentDocumentBluePrint
             _openMode = mode;
         }
 
+        /// <summary>
+        /// Closes the document and deletes the local file.
+        /// </summary>
         public void Close()
         {
             if (!String.IsNullOrEmpty(_localFileName))
@@ -70,11 +105,15 @@ namespace CurrentDocumentBluePrint
             _openMode = OpenMode.OPEN_NONE;
         }
 
+        /// <summary>
+        /// Prepares the document for saving by prompting for a file name.
+        /// </summary>
+        /// <param name="hwnd">Parent window handle.</param>
+        /// <param name="baseDir">Base directory for saving.</param>
         public void PrepareSave(IntPtr hwnd, string baseDir)
         {
             WindowWrapper parentWindow = new WindowWrapper(hwnd);
 
-            // Save As
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.DefaultExt = Path.GetExtension(_filePath);
             dlg.RestoreDirectory = true;
@@ -95,6 +134,11 @@ namespace CurrentDocumentBluePrint
             _saveToPath = dlg.FileName;
         }
 
+        /// <summary>
+        /// Saves the document to the specified target file name.
+        /// </summary>
+        /// <param name="targetFileName">Target file name.</param>
+        /// <returns>New Document instance if a new document is created, otherwise null.</returns>
         public Document Save(string targetFileName)
         {
             if (String.IsNullOrEmpty(targetFileName))
@@ -124,10 +168,15 @@ namespace CurrentDocumentBluePrint
             }
         }
 
-        // prompts for a new filename, creates a new document, and copies
-        // the argument file to the new filename
-        public static Document CreateNewDocument(IntPtr hwnd, string baseDir,
-                                                 string fileName, string title)
+        /// <summary>
+        /// Prompts for a new filename, creates a new document, and copies the argument file to the new filename.
+        /// </summary>
+        /// <param name="hwnd">Parent window handle.</param>
+        /// <param name="baseDir">Base directory for saving.</param>
+        /// <param name="fileName">Source file name.</param>
+        /// <param name="title">Document title.</param>
+        /// <returns>New Document instance.</returns>
+        public static Document CreateNewDocument(IntPtr hwnd, string baseDir, string fileName, string title)
         {
             WindowWrapper parentWindow = new WindowWrapper(hwnd);
 
@@ -173,7 +222,13 @@ namespace CurrentDocumentBluePrint
             return doc;
         }
 
-        // prompts the user to select file(s) for opening
+        /// <summary>
+        /// Prompts the user to select file(s) for opening.
+        /// </summary>
+        /// <param name="hwnd">Parent window handle.</param>
+        /// <param name="baseDir">Base directory for opening.</param>
+        /// <param name="multiSelect">Whether to allow multiple selection.</param>
+        /// <returns>Array of Document instances.</returns>
         public static Document[] SelectFiles(IntPtr hwnd, string baseDir, bool multiSelect)
         {
             WindowWrapper parentWindow = new WindowWrapper(hwnd);
@@ -215,7 +270,12 @@ namespace CurrentDocumentBluePrint
             return docs.ToArray();
         }
 
-        // verify if the filename is under the directory
+        /// <summary>
+        /// Verifies if the filename is under the specified directory.
+        /// </summary>
+        /// <param name="directory">Directory path.</param>
+        /// <param name="filename">File name.</param>
+        /// <returns>True if the file is under the directory, otherwise false.</returns>
         private static bool IsFileUnderDirectory(string directory, string filename)
         {
             return filename.StartsWith(directory, StringComparison.CurrentCultureIgnoreCase);
