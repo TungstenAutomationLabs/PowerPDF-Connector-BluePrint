@@ -19,7 +19,7 @@ PowerPDF-Connector-BluePrint/
 2. In the project properties:
    - Set **Platform Target** to `x86` under **Build**
    - Ensure `AssemblyVersion` is defined in `AssemblyInfo.cs` if required
-3. (Optional) Update the `GuidAttribute` in `Connector.cs` using **Tools > Create GUID**
+3. Update the `GuidAttribute` in `Connector.cs` using **Tools > Create GUID**
 4. Build the solution in **Release** mode
 
 The output DLL will be located at:
