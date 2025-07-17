@@ -6,10 +6,10 @@ This repository provides a .NET Framework-based sample connector for integrating
 
 ```
 PowerPDF-Connector-BluePrint/
-├── Documentation/                             # Developer documentation (Word format)
-├── PowerPDF-Connector-CurrentDocumentBluePrint/  # Source project (.csproj)
-├── References/                                # External DLLs or TLBs if needed
-├── PowerPDF-Connector-BluePrint.sln           # Visual Studio solution file
+├── Documentation/                             		# Developer documentation (Word format)
+├── PowerPDF-Connector-CurrentDocumentBluePrint/  	# Source project (.csproj)
+├── References/                                		# External DLLs or TLBs if needed
+├── PowerPDF-Connector-BluePrint.sln           		# Visual Studio solution file
 ├── README.md
 ```
 
