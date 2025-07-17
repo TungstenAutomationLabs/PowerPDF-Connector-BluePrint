@@ -50,7 +50,7 @@ To make the connector appear in the **Connectors** tab of the Power PDF ribbon:
    ```
 3. Open the file:
    ```
-   References\XML\PublishMode.xml.partial
+   XML\PublishMode.xml.partial
    ```
 4. Copy the contents of the partial file and **insert them directly after** the `<toolbar name="connectors"...>` line in the `Publish Mode.xml` file.
 
