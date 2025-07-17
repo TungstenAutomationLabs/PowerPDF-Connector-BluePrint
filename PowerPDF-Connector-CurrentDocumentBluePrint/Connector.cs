@@ -178,7 +178,7 @@ namespace CurrentDocumentBluePrint
         /// <returns>Decrypted setting value.</returns>
         private string LoadEncryptedSetting(string key)
         {
-            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\PPDFFraudConnector"))
+            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\CurrentDocumentBlueprint"))
             {
                 if (rk == null)
                     return "";
