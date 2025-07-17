@@ -56,7 +56,7 @@ To make the connector appear in the **Connectors** tab of the Power PDF ribbon:
 
 5. Delete the cached layout file if it exists:
    ```
-   %appdata%\Kofax\PDF\KofaxPDF\UILayout\Publish.xml
+   %appdata%\Kofax\PDF\PowerPDF\UILayout\Publish.xml
    ```
 
 6. Restart Power PDF to apply the updated UI.
@@ -102,9 +102,9 @@ Documentation/PPDF Connector – Developer’s Guide.docx
 ## 🧹 Troubleshooting
 
 - Ensure the DLL is correctly registered using `regasm`
-- Delete the cached layout file after modifying the toolbar XML:
+- Delete the cached UI file after editing `Publish Mode.xml`:
   ```
-  %appdata%\Kofax\PDF\KofaxPDF\UILayout\Publish.xml
+  %appdata%\Kofax\PDF\PowerPDF\UILayout\Publish.xml
   ```
 - Restart Power PDF after any deployment change
 
