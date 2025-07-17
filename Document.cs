@@ -1,11 +1,9 @@
-﻿using System;
+﻿using DMSConnector;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DMSConnector;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.IO;
 
 namespace CurrentDocumentBluePrint
 {
@@ -45,10 +43,14 @@ namespace CurrentDocumentBluePrint
         protected string _title;
         protected OpenMode _openMode = OpenMode.OPEN_NONE;
 
-        public string UniqueId { get { return _uniqueId; } }
-        public string LocalFileName { get { return _localFileName; } }
-        public string Title { get { return _title; } } 
-        public OpenMode OpenMode { get { return _openMode; } }
+        public string UniqueId
+        { get { return _uniqueId; } }
+        public string LocalFileName
+        { get { return _localFileName; } }
+        public string Title
+        { get { return _title; } }
+        public OpenMode OpenMode
+        { get { return _openMode; } }
 
         public void Open(OpenMode mode)
         {
@@ -124,12 +126,12 @@ namespace CurrentDocumentBluePrint
 
         // prompts for a new filename, creates a new document, and copies
         // the argument file to the new filename
-        public static Document CreateNewDocument(IntPtr hwnd, string baseDir, 
+        public static Document CreateNewDocument(IntPtr hwnd, string baseDir,
                                                  string fileName, string title)
         {
             WindowWrapper parentWindow = new WindowWrapper(hwnd);
 
-            if ( String.IsNullOrEmpty(title ) )
+            if (String.IsNullOrEmpty(title))
                 title = fileName;
 
             SaveFileDialog dlg = new SaveFileDialog();
@@ -150,13 +152,13 @@ namespace CurrentDocumentBluePrint
             while (res != DialogResult.OK)
             {
                 res = dlg.ShowDialog(parentWindow);
-                if ( res == DialogResult.Cancel )
+                if (res == DialogResult.Cancel)
                 {
                     throw new COMException("Operation cancelled", ERRORS.E_CANCELLED);
                 }
-                
+
                 // verify that the selected file is under the base directory path
-                if ( !IsFileUnderDirectory(baseDir, dlg.FileName) )
+                if (!IsFileUnderDirectory(baseDir, dlg.FileName))
                 {
                     MessageBox.Show(parentWindow, "You must select a file under " + baseDir);
                     res = DialogResult.None;
@@ -214,7 +216,7 @@ namespace CurrentDocumentBluePrint
         }
 
         // verify if the filename is under the directory
-        static bool IsFileUnderDirectory(string directory, string filename)
+        private static bool IsFileUnderDirectory(string directory, string filename)
         {
             return filename.StartsWith(directory, StringComparison.CurrentCultureIgnoreCase);
         }

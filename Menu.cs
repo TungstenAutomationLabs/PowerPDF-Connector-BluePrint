@@ -1,18 +1,18 @@
 ﻿using DMSConnector;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
 
 namespace CurrentDocumentBluePrint
 {
     // enum for menuItemId values
     public enum ItemId
     {
-        DEFAULT= 0, // can be used for separators too
+        DEFAULT = 0, // can be used for separators too
         SEPARATOR = 0,
-        TryMe   = 1,
-        SAVE   = 2,
+        TryMe = 1,
+        SAVE = 2,
         SAVEAS = 3
     }
 
@@ -80,7 +80,6 @@ namespace CurrentDocumentBluePrint
                 Add(new MenuItem(def));
             }
         }
-
     }
 
     // holder class for menu item definition, with string and bitmap resources already resolved
@@ -95,10 +94,10 @@ namespace CurrentDocumentBluePrint
         public IntPtr hIconSmall;
         public bool enabledWithoutDoc;
 
-        static readonly int LOGPIXELSX = 88;
+        private static readonly int LOGPIXELSX = 88;
 
         [DllImport("gdi32.dll")]
-        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 
         public MenuItem(MenuItemDefinition definition)
         {
@@ -116,10 +115,10 @@ namespace CurrentDocumentBluePrint
                 }
                 else
                     if (lx >= 144)
-                    {
-                        resBig = definition.resIconBig_150;
-                        resSmall = definition.resIconSmall_150;
-                    }
+                {
+                    resBig = definition.resIconBig_150;
+                    resSmall = definition.resIconSmall_150;
+                }
 
                 g.ReleaseHdc();
             }
@@ -158,6 +157,7 @@ namespace CurrentDocumentBluePrint
             else
                 return IntPtr.Zero;
         }
+
         #endregion Private members
 
         #region IDisposable Members
@@ -182,7 +182,6 @@ namespace CurrentDocumentBluePrint
             }
         }
 
-        #endregion
+        #endregion IDisposable Members
     }
-
 }

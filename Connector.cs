@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Linq;
-using System.Text;
-using System.Drawing;
+﻿using DMSConnector;
 using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
-using DMSConnector;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CurrentDocumentBluePrint
@@ -23,13 +22,13 @@ namespace CurrentDocumentBluePrint
     [ComVisible(true)]
     [GuidAttribute("219588E2-A4B6-4A7A-9044-BDCBDE05566E")]
     [ProgId("CurrentDocumentBluePrint.Connector")]
-    public class Connector :  IDMSConnector, 
+    public class Connector : IDMSConnector,
                               IPropertyPageHandler  // this class implements IPropertyPageHandler itself
 
     {
         #region COM registration
 
-        static string strProgId = ((ProgIdAttribute)(typeof(Connector).GetCustomAttributes(typeof(ProgIdAttribute), true).First())).Value;
+        private static string strProgId = ((ProgIdAttribute)(typeof(Connector).GetCustomAttributes(typeof(ProgIdAttribute), true).First())).Value;
 
         // register this connector under "HKLM\Software\Scansoft\Connectors"
         [ComRegisterFunctionAttribute]
@@ -69,6 +68,7 @@ namespace CurrentDocumentBluePrint
         {
             return ((ProgIdAttribute)t.GetCustomAttributes(typeof(ProgIdAttribute), true).First()).Value;
         }
+
         #endregion COM registration
 
         protected string _connectorName = "CurrentDocumentBluePrint";
@@ -83,6 +83,7 @@ namespace CurrentDocumentBluePrint
         protected static string _defaultBaseDirectory = @"c:\";
 
         #region Constructor / Dispose
+
         public Connector()
         {
         }
@@ -99,8 +100,8 @@ namespace CurrentDocumentBluePrint
         }
 
         // returns the definition of one menu item
-        void IDMSConnector.MenuGetMenuItem(int num, out int menuItemId, out string text, 
-            out string tooltip, out bool isPartOfToolbar, out CallbackType cbType, 
+        void IDMSConnector.MenuGetMenuItem(int num, out int menuItemId, out string text,
+            out string tooltip, out bool isPartOfToolbar, out CallbackType cbType,
             out int hIconBig, out int hIconSmall, out bool enabledWithoutDoc)
         {
             if (num < 0 || num >= _menuItems.Count)
@@ -128,13 +129,12 @@ namespace CurrentDocumentBluePrint
             // by default every menu item is enabled for every document
             return true;
         }
-        
+
         // would be called for menu items with MenuItem callback type
         void IDMSConnector.MenuAction(int menuItemId, string docId)
         {
             if (menuItemId == (int)ItemId.TryMe)
             {
-
                 string apiURL = LoadEncryptedSetting(API_URL);
                 string secret = LoadEncryptedSetting(SECRET);
                 if (string.IsNullOrEmpty(apiURL) || string.IsNullOrEmpty(secret))
@@ -147,7 +147,6 @@ namespace CurrentDocumentBluePrint
                     // For example, you could open a dialog or perform some operation
                     MessageBox.Show("API URL: " + apiURL + "\nSecret: " + secret, "It Works", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
             }
             else
                 // we don't have any such menu item by default
@@ -178,25 +177,27 @@ namespace CurrentDocumentBluePrint
                 }
             }
         }
+
         #endregion Menu functions
 
         public string GetBaseDirFromRegistry()
         {
             try
             {
-                RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\" + 
+                RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\" +
                                             GetProgId(this.GetType()));
-                if ( rk != null )
+                if (rk != null)
                 {
                     Object value = rk.GetValue("BaseDirectory", _defaultBaseDirectory);
                     return value.ToString();
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
             }
             return _defaultBaseDirectory;
         }
+
         protected void SaveBaseDirToRegistry()
         {
             RegistryKey rkSoftware = OpenOrCreateSubkey(Registry.CurrentUser, "Software");
@@ -205,6 +206,7 @@ namespace CurrentDocumentBluePrint
             RegistryKey rkThisOne = OpenOrCreateSubkey(rkConnectors, GetProgId(this.GetType()));
             rkThisOne.SetValue("BaseDirectory", (object)_baseDirectory, RegistryValueKind.String);
         }
+
         public string BaseDirectory
         {
             get { return _baseDirectory; }
@@ -223,7 +225,7 @@ namespace CurrentDocumentBluePrint
 
                 // switch the current culture based on the language
                 CultureInfo cultureInfo = Langs.Iso639_3ToCulture(_languageCode);
-                if ( ! cultureInfo.IsNeutralCulture )
+                if (!cultureInfo.IsNeutralCulture)
                     Thread.CurrentThread.CurrentCulture = cultureInfo;
 
                 Thread.CurrentThread.CurrentUICulture = cultureInfo;
@@ -260,8 +262,7 @@ namespace CurrentDocumentBluePrint
             set { _parentWindow = (IntPtr)value; }
         }
 
-        #endregion Init / Shutdown
-
+        #endregion Init, Shutdown, etc.
 
         string IDMSConnector.DocAddNew(string sourceFile, string title, string[] docProperties)
         {
@@ -273,8 +274,6 @@ namespace CurrentDocumentBluePrint
             }
             return null;
         }
-
-        
 
         string IDMSConnector.DocGetLocalFile(string docId)
         {
@@ -301,12 +300,14 @@ namespace CurrentDocumentBluePrint
             // if the document was modified inside the application
             throw new NotImplementedException();
         }
+
         void IDMSConnector.DocClose(string docId, DMSConnector.CloseReason reason)
         {
             Document doc = _documents[docId];
             doc.Close();
             _documents.Remove(docId);
         }
+
         void IDMSConnector.DocOpen(string docId, OpenMode mode)
         {
             Document doc = _documents[docId];
@@ -366,13 +367,12 @@ namespace CurrentDocumentBluePrint
             get { return this; }
         }
 
-        #endregion
+        #endregion IDMSConnector implementation
 
         #region IPropertyPageHandler Members
 
-
         [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+        private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         int IPropertyPageHandler.Create(int parenthWnd)
         {
@@ -402,6 +402,6 @@ namespace CurrentDocumentBluePrint
                 p.UpdateData();
         }
 
-        #endregion
+        #endregion IPropertyPageHandler Members
     }
 }

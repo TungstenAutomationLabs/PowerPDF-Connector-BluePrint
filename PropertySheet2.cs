@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Win32;
-using System.Security.Cryptography;
 
 namespace CurrentDocumentBluePrint
 {
@@ -54,12 +50,10 @@ namespace CurrentDocumentBluePrint
             this.textBoxDirectory.Text = m_conn.BaseDirectory;
         }
 
-
         [Flags]
         public enum WS_STYLE : int
         {
             WS_CHILD = 0x40000000,
-            
         }
 
         [Flags]
@@ -87,7 +81,7 @@ namespace CurrentDocumentBluePrint
             }
         }
 
-        // This virtual fn is called when the window handle (HWND) is 
+        // This virtual fn is called when the window handle (HWND) is
         // destroyed.
         protected override void OnHandleDestroyed(EventArgs e)
         {
@@ -95,23 +89,23 @@ namespace CurrentDocumentBluePrint
             base.OnHandleDestroyed(e);
         }
 
-
         #region Sheet Store functions
+
         // dictionary for storing HWND - Form associations
-        protected static Dictionary<IntPtr,PropertySheet2> sheetList = 
-                                                new Dictionary<IntPtr,PropertySheet2>();
+        protected static Dictionary<IntPtr, PropertySheet2> sheetList =
+                                                new Dictionary<IntPtr, PropertySheet2>();
 
         // store the form in the sheet list
         protected void StoreSheet()
         {
-            if ( ! sheetList.ContainsKey(this.Handle) )
+            if (!sheetList.ContainsKey(this.Handle))
                 sheetList.Add(this.Handle, this);
         }
 
         // clear the form from the sheet list
         protected void ClearSheet()
         {
-            if ( sheetList.ContainsKey(this.Handle) )
+            if (sheetList.ContainsKey(this.Handle))
                 sheetList.Remove(this.Handle);
         }
 
@@ -127,6 +121,7 @@ namespace CurrentDocumentBluePrint
         {
             return GetSheet((IntPtr)hWnd);
         }
+
         #endregion Sheet Store functions
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -176,10 +171,9 @@ namespace CurrentDocumentBluePrint
         {
             try
             {
-                                // Load encrypted fields
+                // Load encrypted fields
                 txtAPIURL.Text = LoadEncryptedSetting(API_URL);
                 txtSecret.Text = LoadEncryptedSetting(SECRET);
-                
             }
             catch (Exception ex)
             {

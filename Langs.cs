@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Globalization;
+using System.Linq;
 
 namespace CurrentDocumentBluePrint
 {
-    class Langs
+    internal class Langs
     {
         // creates and returns a new CultureInfo based on iso639_3
         public static CultureInfo Iso639_3ToCulture(string iso639_3)
@@ -31,8 +30,8 @@ namespace CurrentDocumentBluePrint
             return result;
         }
 
-
         #region Private members
+
         // find a culture string match the ISO 3 letter code
         // this might not work properly for DMSConnectors, only use it as a fallback
         private static string Iso639_3ToCultureString_Default(string iso639_3)
@@ -77,12 +76,12 @@ namespace CurrentDocumentBluePrint
             {"dan",  "da"}, // Danish
             {"qct",  "zh-TW"}, // qct is a reserved ISO code, DMSConnector use it for Chinse (Traditional)
             {"jpn",  "ja"}, // Japanese
-            {"kor",  "ko"}, 
+            {"kor",  "ko"},
             {"zho",  "zh-CN"}, 	// zho is the Chinese ISO code, DMSConnector use it for Chinse (Simplified)
             {"nor",  "no"}, 	// Norwegian (Bokmal)
-            {"rus",  "ru"}, 
-            {"pol",  "pl"}, 
-            {"tur",  "tr"}, 
+            {"rus",  "ru"},
+            {"pol",  "pl"},
+            {"tur",  "tr"},
             {"fin",  "fi"},
         };
 
