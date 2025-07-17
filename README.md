@@ -6,10 +6,10 @@ This repository provides a .NET Framework-based sample connector for integrating
 
 ```
 PowerPDF-Connector-BluePrint/
-├── Documentation/                             		# Developer documentation (Word format)
-├── PowerPDF-Connector-CurrentDocumentBluePrint/  	# Source project (.csproj)
-├── References/                                		# External DLLs or TLBs if needed
-├── PowerPDF-Connector-BluePrint.sln           		# Visual Studio solution file
+├── Documentation/                               # Developer documentation (Word format)
+├── PowerPDF-Connector-CurrentDocumentBluePrint/ # Source project (.csproj)
+├── References/                                  # External DLLs or TLBs if needed
+├── PowerPDF-Connector-BluePrint.sln             # Visual Studio solution file
 ├── README.md
 ```
 
@@ -38,44 +38,50 @@ Copy `SampleNETConnector.dll` (and any required dependencies from `References/`)
 
 ### 2. Update Publish Mode Configuration
 
-1. Open:
+To make the connector appear in the **Connectors** tab of the Power PDF ribbon:
+
+1. Open the file:
    ```
    [Power PDF install folder]\resource\PowerPDF\UILayout\Publish Mode.xml
    ```
-2. Locate the section:
+2. Locate the line:
    ```xml
    <toolbar name="connectors" shortKey="N">
    ```
-3. Paste in the XML snippet found in:
+3. Open the file:
    ```
    References\XML\PublishMode.xml.partial
    ```
-4. Delete the cached layout file if it exists to refresh UI layout:
+4. Copy the contents of the partial file and **insert them directly after** the `<toolbar name="connectors"...>` line in the `Publish Mode.xml` file.
+
+5. Delete the cached layout file if it exists:
    ```
-   %appdata%\Kofax\PDF\PowerPDF\UILayout\Publish.xml
+   %appdata%\Kofax\PDF\KofaxPDF\UILayout\Publish.xml
    ```
+
+6. Restart Power PDF to apply the updated UI.
 
 ### 3. Add a Connector Display Name
 
-Edit:
+Edit the file:
 ```
 [Power PDF install folder]\resource\PowerPDF\ENU\NameAndTitle.xml
 ```
 
-Under the `<!--connectors toolbar-->` section, add:
+Add the following under the `<!--connectors toolbar-->` section:
 ```xml
 <PFFGroup name="connector::CurrentDocumentBluePrint" title="Blueprint" />
 ```
 
 ### 4. Register the Connector DLL
 
-Run the following from an **elevated (Administrator)** command prompt:
+Run the following command from an **elevated (Administrator)** command prompt:
 
 ```cmd
 "C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\SampleNETConnector.dll" /codebase
 ```
 
-To unregister:
+To unregister the DLL:
 ```cmd
 "C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" /unregister "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\SampleNETConnector.dll"
 ```
@@ -96,11 +102,11 @@ Documentation/PPDF Connector – Developer’s Guide.docx
 ## 🧹 Troubleshooting
 
 - Ensure the DLL is correctly registered using `regasm`
-- Delete the cached UI file after editing `Publish Mode.xml`:
+- Delete the cached layout file after modifying the toolbar XML:
   ```
-  %appdata%\Kofax\PDF\PowerPDF\UILayout\Publish.xml
+  %appdata%\Kofax\PDF\KofaxPDF\UILayout\Publish.xml
   ```
-- Restart Power PDF to apply changes
+- Restart Power PDF after any deployment change
 
 ## ✅ Summary
 

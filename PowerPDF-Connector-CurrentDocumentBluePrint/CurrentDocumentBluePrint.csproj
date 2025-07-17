@@ -126,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
-    <None Include="PPDF Connector  - Developer’s Guide.docx" />
     <None Include="Resources\Image_Open.png" />
   </ItemGroup>
   <ItemGroup>
