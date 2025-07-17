@@ -1,6 +1,6 @@
-# Tungsten Automation Power PDF Connector – Blueprint Template
+# Tungsten Power PDF – Connector Blueprint
 
-This repository provides a .NET Framework-based sample connector for integrating with **Tungsten Power PDF**, built using the `CurrentDocumentBluePrint` template. It allows developers to extend Power PDF functionality with custom open/save behaviours and toolbar actions.
+This repository provides a .NET Framework-based sample connector for integrating with **Tungsten Power PDF**. It allows developers to extend Power PDF functionality with custom open/save behaviours and toolbar actions.
 
 ## 📁 Folder Structure
 
@@ -33,14 +33,14 @@ PowerPDF-Connector-CurrentDocumentBluePrint\bin\Release\SampleNETConnector.dll
 
 Copy `SampleNETConnector.dll` (and any required dependencies from `References/`) to:
 ```
-[Power PDF install folder]\\bin\\Connectors\\
+[Power PDF install folder]\bin\Connectors\
 ```
 
 ### 2. Update Publish Mode Configuration
 
 1. Open:
    ```
-   [Power PDF install folder]\\resource\\PowerPDF\\UILayout\\Publish Mode.xml
+   [Power PDF install folder]\resource\PowerPDF\UILayout\Publish Mode.xml
    ```
 2. Locate the section:
    ```xml
@@ -48,18 +48,18 @@ Copy `SampleNETConnector.dll` (and any required dependencies from `References/`)
    ```
 3. Paste in the XML snippet found in:
    ```
-   References\\XML\\PublishMode.xml.partial
+   References\XML\PublishMode.xml.partial
    ```
 4. Delete the cached layout file if it exists to refresh UI layout:
    ```
-   %appdata%\\Kofax\\PDF\\PowerPDF\\UILayout\\Publish.xml
+   %appdata%\Kofax\PDF\PowerPDF\UILayout\Publish.xml
    ```
 
 ### 3. Add a Connector Display Name
 
 Edit:
 ```
-[Power PDF install folder]\\resource\\PowerPDF\\ENU\\NameAndTitle.xml
+[Power PDF install folder]\resource\PowerPDF\ENU\NameAndTitle.xml
 ```
 
 Under the `<!--connectors toolbar-->` section, add:
@@ -72,12 +72,12 @@ Under the `<!--connectors toolbar-->` section, add:
 Run the following from an **elevated (Administrator)** command prompt:
 
 ```cmd
-"C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\regasm.exe" "C:\\Program Files (x86)\\Kofax\\Power PDF 51\\bin\\Connectors\\SampleNETConnector.dll" /codebase
+"C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\SampleNETConnector.dll" /codebase
 ```
 
 To unregister:
 ```cmd
-"C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\regasm.exe" /unregister "C:\\Program Files (x86)\\Kofax\\Power PDF 51\\bin\\Connectors\\SampleNETConnector.dll"
+"C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" /unregister "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\SampleNETConnector.dll"
 ```
 
 ## 📄 Developer Documentation
@@ -98,7 +98,7 @@ Documentation/PPDF Connector – Developer’s Guide.docx
 - Ensure the DLL is correctly registered using `regasm`
 - Delete the cached UI file after editing `Publish Mode.xml`:
   ```
-  %appdata%\\Kofax\\PDF\\PowerPDF\\UILayout\\Publish.xml
+  %appdata%\Kofax\PDF\PowerPDF\UILayout\Publish.xml
   ```
 - Restart Power PDF to apply changes
 
@@ -107,7 +107,7 @@ Documentation/PPDF Connector – Developer’s Guide.docx
 | Task                              | Status |
 |-----------------------------------|--------|
 | Build DLL in Visual Studio        | ✅     |
-| Place in `bin\\Connectors`        | ✅     |
+| Place in `bin\Connectors`         | ✅     |
 | Update `Publish Mode.xml`         | ✅     |
 | Register DLL via `regasm`         | ✅     |
 | Clear cache and restart Power PDF | ✅     |
