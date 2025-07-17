@@ -84,7 +84,7 @@ To unregister:
 
 Refer to the developer guide included in this repository for full details on:
 - Connector lifecycle methods (`DocAddNew`, `DocOpen`, `DocSave`, `MenuAction`)
-- Configuration UI via `PropertySheet2.cs`
+- Configuration UI via `ConfigurationControl.cs`
 - Toolbar/menu integration via `Menu.cs` and `Resources.resx`
 - Required XML changes and registry registration
 
