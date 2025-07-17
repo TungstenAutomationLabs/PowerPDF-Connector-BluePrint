@@ -161,7 +161,7 @@ namespace CurrentDocumentBluePrint
             byte[] encrypted = ProtectedData.Protect(Encoding.UTF8.GetBytes(value), null, DataProtectionScope.CurrentUser);
             string base64 = Convert.ToBase64String(encrypted);
 
-            using (RegistryKey rk = Registry.CurrentUser.CreateSubKey(@"Software\ScanSoft\Connectors\PPDFFraudConnector"))
+            using (RegistryKey rk = Registry.CurrentUser.CreateSubKey(@"Software\ScanSoft\Connectors\CurrentDocumentBlueprint"))
             {
                 rk.SetValue(key, base64, RegistryValueKind.String);
             }
@@ -174,7 +174,7 @@ namespace CurrentDocumentBluePrint
         /// <returns>Decrypted setting value.</returns>
         private string LoadEncryptedSetting(string key)
         {
-            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\PPDFFraudConnector"))
+            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\ScanSoft\Connectors\CurrentDocumentBlueprint"))
             {
                 if (rk == null)
                     return "";
