@@ -24,14 +24,14 @@ PowerPDF-Connector-BluePrint/
 
 The output DLL will be located at:
 ```
-PowerPDF-Connector-CurrentDocumentBluePrint\bin\Release\SampleNETConnector.dll
+PowerPDF-Connector-CurrentDocumentBluePrint\bin\Release\CurrentDocumentBluePrint.dll
 ```
 
 ## 🚀 Deployment Steps
 
 ### 1. Copy the Connector DLL
 
-Copy `SampleNETConnector.dll` (and any required dependencies from `References/`) to:
+Copy `CurrentDocumentBluePrint.dll` (and any required dependencies from `References/`) to:
 ```
 [Power PDF install folder]\bin\Connectors\
 ```
@@ -78,12 +78,12 @@ Add the following under the `<!--connectors toolbar-->` section:
 Run the following command from an **elevated (Administrator)** command prompt:
 
 ```cmd
-"C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\SampleNETConnector.dll" /codebase
+"C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\CurrentDocumentBluePrint.dll" /codebase
 ```
 
 To unregister the DLL:
 ```cmd
-"C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" /unregister "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\SampleNETConnector.dll"
+"C:\Windows\Microsoft.NET\Framework\v4.0.30319\regasm.exe" /unregister "C:\Program Files (x86)\Kofax\Power PDF 51\bin\Connectors\CurrentDocumentBluePrint.dll"
 ```
 
 ## 📄 Developer Documentation
