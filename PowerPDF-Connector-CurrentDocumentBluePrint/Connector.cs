@@ -106,6 +106,7 @@ namespace CurrentDocumentBluePrint
         /// </summary>
         public Connector()
         {
+           
         }
 
         /// <summary>
@@ -254,11 +255,13 @@ namespace CurrentDocumentBluePrint
                 _languageCode = LangCode;
 
                 CultureInfo cultureInfo = Langs.Iso639_3ToCulture(_languageCode);
+               
                 if (!cultureInfo.IsNeutralCulture)
                     Thread.CurrentThread.CurrentCulture = cultureInfo;
 
                 Thread.CurrentThread.CurrentUICulture = cultureInfo;
 
+                
                 _menuItems = MenuItemList.Create();
 
                 _baseDirectory = GetBaseDirFromRegistry();
